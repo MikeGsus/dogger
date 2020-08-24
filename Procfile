@@ -1,1 +1,1 @@
-npm start
+node build/index.js
