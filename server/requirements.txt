@@ -1,0 +1,5 @@
+django
+djangorestframework
+Pillow
+gunicorn
+django-heroku
