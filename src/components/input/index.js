@@ -9,6 +9,7 @@ import {
 const Input = ({
   error,
   label,
+  maxLength,
   name,
   onChange,
   type,
@@ -20,7 +21,7 @@ const Input = ({
         { label }
       </Label>
       <InputElement
-        error={error}
+        maxLength={maxLength || 500}
         name={name}
         onChange={onChange}
         type={type || 'text'}

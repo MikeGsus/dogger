@@ -5,8 +5,7 @@ const logUpValidation = Yup.object().shape({
     .email('Correo invalido')
     .required('Campo requerido'),
   password: Yup.string()
-    .matches(/[a-z]/g, 'Debe tener al menos una minúscula') 
-    .matches(/[A-Z]/g, 'Debe tener al menos una mayúscula')
+    .matches(/[a-z]|[A-Z]/g, 'Debe tener al menos una letra') 
     .matches(/[0-9]/g, 'Debe tener al menos un número')
     .matches(/[^a-zA-Z\d]/g, 'Debe tener al menos un caracter especial')
     .min(8, 'Debe tener mínimo 8 caracteres')
@@ -18,7 +17,7 @@ const logUpValidation = Yup.object().shape({
     .max(50, 'El apellido es demasiado largo')
     .required('Campo requerido'),
   phone: Yup.string()
-    .matches(/[0-9].{10,}/g, 'Debe tener diez digitos')
+    .matches(/[0-9].{9,}/g, 'Debe tener diez digitos')
     .required('Campo requerido'),
   address: Yup.string()
     .required('Campo requerido'),
@@ -28,6 +27,7 @@ const logUpValidation = Yup.object().shape({
       [Yup.ref("password")],
       "No coincide"
     )})
+    .required('Campo requerido'),
 })
 
 export default logUpValidation

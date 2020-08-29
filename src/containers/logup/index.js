@@ -1,12 +1,16 @@
 import React from 'react'
 import { Formik } from 'formik'
+import { connect } from 'react-redux'
+import { createUser } from '../../actions/users'
 import {
   Button,
-  Input
+  Input,
+  Switch
 } from '../../components'
 import { logUpValidation } from '../../validationSchemas'
 import {
   Container,
+  SwitchContainer,
   Title
 } from './styled'
 
@@ -17,10 +21,13 @@ const initialValues = {
   lastName: '',
   phone: '',
   address: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  owner: true,
+  walker: false
 }
 
-const LogUp = () => {
+const LogUp = (props) => {
+  const { createUser } = props
   return (
     <Container>
       <Title>Registro</Title>
@@ -29,6 +36,7 @@ const LogUp = () => {
         validationSchema={logUpValidation}
         onSubmit={(props) => {
           console.log('formik props >>>', props)
+          createUser()
         }}
       >
         {({
@@ -38,7 +46,8 @@ const LogUp = () => {
           handleSubmit,
           handleBlur,
           isSubmitting,
-          isValid
+          isValid,
+          setValues
         }) => (
           <>
             <Input
@@ -74,15 +83,43 @@ const LogUp = () => {
               onChange={handleChange}
               type='tel'
               value={values.phone}
+              maxLength={10}
             />
             <Input
               error={errors.address}
-              label='Correo'
+              label='Direción'
               name='address'
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.address}
             />
+            <SwitchContainer>
+              <h4>¿Cómo deseas registrarte?</h4>
+              <Switch
+                label='Dueño de un perro'
+                name='owner'
+                onChange={() => {
+                  setValues({
+                    ...values,
+                    owner: !values.owner,
+                    walker: !values.walker
+                  }, false)
+                }}
+                value={values.owner}
+              />
+              <Switch
+                label='Paseador'
+                name='walker'
+                onChange={() => {
+                  setValues({
+                    ...values,
+                    owner: !values.owner,
+                    walker: !values.walker
+                  }, false)
+                }}
+                value={values.walker}
+              />
+            </SwitchContainer>
             <Input
               error={errors.password}
               label='Contraseña'
@@ -115,4 +152,8 @@ const LogUp = () => {
   )
 }
 
-export default LogUp
+const MapDispatchToProps = (dispatch) => ({
+  createUser: () => dispatch(createUser())
+})
+
+export default connect(null, MapDispatchToProps)(LogUp)
