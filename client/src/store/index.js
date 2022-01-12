@@ -9,7 +9,6 @@ import {
   persistReducer
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import logger from 'redux-logger'
 
 import {
   account,
@@ -38,7 +37,7 @@ const persistedReducer = persistReducer(persistConfig, reducers)
 
 let store = createStore(
   persistedReducer,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk)
 )
 
 let persistor = persistStore(store)

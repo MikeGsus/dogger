@@ -18,14 +18,24 @@ export function transformScheduleWalk (scheduleWalk) {
   }
 }
 
+export function transformScheduleWalkForWalker (scheduleWalk) {
+  let fHour = formatHour(scheduleWalk.schedule.start_hour, scheduleWalk.schedule.end_hour)
+  return {
+    dog: `${scheduleWalk.dog.name} - ${scheduleWalk.dog.age} yrs`,
+    owner: `${scheduleWalk.dog.owner.name} ${scheduleWalk.dog.owner.last_name} - ${scheduleWalk.dog.owner.phone}`,
+    schedule: `Walk on ${capitalize(scheduleWalk.schedule.day_of_week)} from ${fHour.start} to ${fHour.end}`
+  }
+}
+
 export function useSchedule () {
   const dispatch = useDispatch()
   const scheduleState = useSelector(scheduleSelector)
   const user = useSelector(state => state.users)
   async function getScheduleWalks () {
     try {
+      console.log('PATH:', `${ENDPOINT}/api/v1/users/${user.user.id}/scheduleWalks`)
       const response = await fetch(
-        BASE_PATH,
+        `${ENDPOINT}/api/v1/users/${user.user.id}/scheduleWalks`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -35,6 +45,7 @@ export function useSchedule () {
         }
       )
       const scheduleWalks = await response.json()
+      console.log('JSON:', scheduleWalks)
       dispatch({ type: 'SET_SCHEDULES_WALKS', payload: scheduleWalks })
     } catch (error) {
       window.alert(error.message)

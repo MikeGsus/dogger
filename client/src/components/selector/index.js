@@ -12,7 +12,7 @@ export const Selector = props => {
     >
       <select onChange={props.onSelect}>
         <option
-          selected={!props.value}
+          defaultValue={!props.value}
           value={0}
         >
           {props.placeholder}
@@ -21,7 +21,8 @@ export const Selector = props => {
           props.data.map(d => {
             return (
               <option
-                selected={props.value === d.id}
+                key={d.id}
+                defaultValue={props.value === d.id}
                 value={d.id}
               >
                 {get(d, props.field)}

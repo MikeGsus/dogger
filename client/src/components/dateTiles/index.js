@@ -53,8 +53,8 @@ export const DateTiles = (props) => {
       style={{ width: '100%', display: 'flex', justifyContent: 'space-between', paddingTop: 20, alignSelf: 'center' }}
     >
       {
-        days.map(d => {
-          return <DateTile disabledDays={disabledDays} selected={props.value === d} onClick={props.onSelectDay} label={d} />
+        days.map((d, idx) => {
+          return <DateTile key={idx} disabledDays={disabledDays} selected={props.value === d} onClick={props.onSelectDay} label={d} />
         })
       }
     </div>
@@ -90,15 +90,14 @@ export function formatHour (start, end) {
 
 export const HourTiles = ({ walker, scheduleDay, ...props }) => {
   const scheduledHours = scheduleDay && (walker && walker.length > 0) ? walker[0].schedules.filter(schedule => schedule.day_of_week === scheduleDay.toLowerCase()) : []
-  console.log('VALUE:', props.value)
   return (
     <div
       style={{ width: '100%', display: 'flex', justifyContent: 'space-between', paddingTop: 20, alignSelf: 'center' }}
     >
       {
-        scheduledHours.map(hour => {
+        scheduledHours.map((hour, idx) => {
           let fHour = formatHour(hour.start_hour, hour.end_hour)
-          return <HourTile disabledDays={[]} selected={props.value === hour.id} onClick={props.onSelectHour} id={hour.id} label={`${fHour.start} - ${fHour.end}`} />
+          return <HourTile key={idx} disabledDays={[]} selected={props.value === hour.id} onClick={props.onSelectHour} id={hour.id} label={`${fHour.start} - ${fHour.end}`} />
         })
       }
     </div>

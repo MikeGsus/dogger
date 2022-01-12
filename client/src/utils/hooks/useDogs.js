@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 const ENDPOINT = process.env.REACT_APP_API_URL
 
-const BASE_URL = `${ENDPOINT}/api/v1/dogs/`
+const BASE_URL = `${ENDPOINT}/api/v1/users`
 
 const dogSelector = state => state.dogs
 const userSelector = state => state.users
@@ -26,7 +26,7 @@ export function useDogs () {
   async function getDogs () {
     setLoading(true)
     try {
-      const response = await fetch(BASE_URL, { headers: { Authorization: `Token ${userState.token}` } })
+      const response = await fetch(`${BASE_URL}/${userState.user.id}/dogs/`, { headers: { Authorization: `Token ${userState.token}` } })
       const dogs = await response.json()
       dispatch({ type: 'SET_DOGS', payload: dogs })
     } catch (error) {

@@ -19,7 +19,6 @@ export function useAuth () {
         }
       )
       const json = await response.json()
-      console.log('json:', json)
       if (json && json.token) {
         dispatch({ type: 'SET_USER', payload: json })
         dispatch({ type: 'LOG_IN' })
