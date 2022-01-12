@@ -29,8 +29,7 @@ export function useDogs () {
       const response = await fetch(`${BASE_URL}/${userState.user.id}/dogs/`, { headers: { Authorization: `Token ${userState.token}` } })
       const dogs = await response.json()
       dispatch({ type: 'SET_DOGS', payload: dogs })
-    } catch (error) {
-      window.alert(error.message)
+    } catch {
     } finally {
       setLoading(false)
     }
@@ -41,8 +40,7 @@ export function useDogs () {
       const response = await fetch(`${ENDPOINT}/api/v1/breeds/`)
       const breeds = await response.json()
       dispatch({ type: 'SET_DOG_BREEDS', payload: breeds })
-    } catch (error) {
-      window.alert(error.message)
+    } catch {
     } finally {
       setLoading(false)
     }

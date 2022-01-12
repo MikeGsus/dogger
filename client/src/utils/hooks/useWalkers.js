@@ -29,8 +29,7 @@ export function useWalkers () {
       const response = await fetch(BASE_URL, { headers: { Authorization: `Token ${userState.token}` } })
       const walkers = await response.json()
       dispatch({ type: 'SET_WALKERS', payload: walkers })
-    } catch (error) {
-      window.alert(error.message)
+    } catch {
     } finally {
       setLoading(false)
     }

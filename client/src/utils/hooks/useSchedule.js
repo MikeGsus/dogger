@@ -45,9 +45,7 @@ export function useSchedule () {
       )
       const scheduleWalks = await response.json()
       dispatch({ type: 'SET_SCHEDULES_WALKS', payload: scheduleWalks })
-    } catch (error) {
-      window.alert(error.message)
-    }
+    } catch {}
   }
   async function createScheduleWalk (body, callback = () => {}) {
     try {
@@ -68,9 +66,7 @@ export function useSchedule () {
         getScheduleWalks()
         callback()
       }
-    } catch (error) {
-      window.alert(error.message)
-    }
+    } catch {}
   }
   useEffect(() => {
     getScheduleWalks()

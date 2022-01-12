@@ -27,9 +27,7 @@ export function useAuth () {
       if (json && json.non_field_errors) {
         window.alert(json.non_field_errors[0])
       }
-    } catch (error) {
-      window.alert(error.message)
-    }
+    } catch {}
   }
   async function createAccount (account, formikActions) {
     try {
@@ -62,9 +60,7 @@ export function useAuth () {
       if (json && json.non_field_errors) {
         window.alert(json.non_field_errors[0])
       }
-    } catch (error) {
-      window.alert(error.message)
-    }
+    } catch {}
   }
   return {
     loginWithEmailAndPassword,
