@@ -3,8 +3,12 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from dogger import views
 
 urlpatterns = [
+    path('breeds/', views.Breeds.as_view()),
+    path('auth/login', views.AuthTokenWithExtraInfo.as_view()),
     path('users/', views.UsersView.as_view()),
     path('users/<int:pk>/', views.UsersDetailsView.as_view()),
+    path('users/<int:pk>/dogs/', views.UserDogs.as_view()),
+    path('users/<int:pk>/scheduleWalks/', views.UserScheduleWalks.as_view()),
     path('dogs/', views.DogsView.as_view()),
     path('dogs/<int:pk>/', views.DogsDetailsView.as_view()),
     path('dog-size/', views.DogSizeView.as_view()),

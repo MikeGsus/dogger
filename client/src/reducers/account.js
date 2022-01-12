@@ -5,7 +5,9 @@ const initialState = {
 const account = (state = initialState, { type, payload}) => {
   switch(type) {
     case 'LOG_IN':
-      return state
+      return {
+        isLogged: true
+      }
     case 'LOG_OUT':
       return initialState
     case 'RESET':

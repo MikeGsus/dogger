@@ -12,20 +12,26 @@ const Input = ({
   name,
   onChange,
   type,
-  value
+  value,
+  style,
+  ...props
 }) => {
   return (
-    <InputContainer>
+    <InputContainer style={style}>
       <Label>
         { label }
       </Label>
-      <InputElement
-        error={error}
-        name={name}
-        onChange={onChange}
-        type={type || 'text'}
-        value={value}
-      />
+      {
+        props.children || (
+          <InputElement
+            error={error}
+            name={name}
+            onChange={onChange}
+            type={type || 'text'}
+            value={value}
+          />
+        )
+      }
       <ErrorLabel>
         { error }
       </ErrorLabel>

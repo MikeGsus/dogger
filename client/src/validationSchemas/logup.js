@@ -18,16 +18,14 @@ const logUpValidation = Yup.object().shape({
     .max(50, 'El apellido es demasiado largo')
     .required('Campo requerido'),
   phone: Yup.string()
-    .matches(/[0-9].{10,}/g, 'Debe tener diez digitos')
-    .required('Campo requerido'),
-  address: Yup.string()
+    .matches(/[0-9]{10}/g, 'Debe tener diez digitos')
     .required('Campo requerido'),
   confirmPassword: Yup.string().when("password", {
     is: val => (val && val.length > 0 ? true : false),
     then: Yup.string().oneOf(
       [Yup.ref("password")],
       "No coincide"
-    )})
+    )}).required('Campo requerido')
 })
 
 export default logUpValidation

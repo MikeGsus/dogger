@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,54 +12,91 @@ import {
   LogIn,
   LogUp
 } from './containers';
+import Dashboard from './containers/dashboard';
+import './App.css'
 
-const AuthRoute = ({ isLogged }) => (
-  <Route path="/dashboard">
-    {
-      isLogged
-      ? (<>
-          <h6>Dashboard</h6>
-          {/* <Dashboard /> */}
-        </>
-        )
-      : (
-          <Redirect
-            to={{
-              pathname:'/'
-            }}
-          />
-        )
-    }
-  </Route>
-)
-
-function App(props) {
-  const { isLogged } = props
+function App() {
+  const account = useSelector(state => state.account)
   return (
     <Router>
       <div className='principal-container'>
         <Navbar />
         <Switch>
           <Route exact path="/">
-            <Home />
+            {
+              account.isLogged
+                ?
+                  (
+                    <Redirect
+                      to={{
+                        pathname:'/dashboard'
+                      }}
+                    />
+                  )
+                : (
+                  <Home />
+                )
+            }
           </Route>
           <Route path="/log-in">
-            <LogIn />
+            {
+              account.isLogged
+                ?
+                  (
+                    <Redirect
+                      to={{
+                        pathname:'/dashboard'
+                      }}
+                    />
+                  )
+                : (
+                  <LogIn />
+                )
+            }
           </Route>
           <Route path="/log-up">
-            <LogUp />
+            {
+              account.isLogged
+                ?
+                  (
+                    <Redirect
+                      to={{
+                        pathname:'/dashboard'
+                      }}
+                    />
+                  )
+                : (
+                  <LogUp />
+                )
+            }
           </Route>
-          <AuthRoute 
-            isLogged={isLogged}
-          />
+          <Route path="/dashboard">
+            {
+              account.isLogged
+                ?
+                  (
+                    <Dashboard />
+                  )
+                : (
+                  <Redirect
+                    to={{
+                      pathname:'/log-in'
+                    }}
+                  />
+                )
+            }
+          </Route>
+          <Route path="*">
+            <Redirect
+              to={{
+                pathname: account.isLogged ? '/dashboard' : '/'
+              }}
+            />
+          </Route>
         </Switch>
       </div>
     </Router>
   );
 }
 
-const mapStateToProps = ({ account }) => ({
-  isLogged: account.isLogged
-})
-
-export default connect(mapStateToProps)(App);
+export default App

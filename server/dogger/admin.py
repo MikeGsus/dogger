@@ -25,7 +25,16 @@ class AdminScheduledWalks(admin.ModelAdmin):
   class Meta:
       meta = ScheduledWalks
 
+
+class AdminBreed(admin.ModelAdmin):
+    list_display = ["name", "description"]
+    list_filter = ["name", "description"]
+    search_fields = ["name", "description"]
+    class Meta:
+        meta = Breed
+
 admin.site.register(Users, AdminUsers)
+admin.site.register(Breed, AdminBreed)
 admin.site.register(Dogs, AdminDogs)
 admin.site.register(DogSize)
 admin.site.register(Schedules)

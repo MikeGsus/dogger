@@ -9,7 +9,8 @@ const Button = ({
   disabled,
   onPress,
   secondary,
-  wide
+  wide,
+  style
 }) => {
   return (
     <ButtonContainer
@@ -18,6 +19,7 @@ const Button = ({
       secondary={secondary}
       type='button'
       wide={wide}
+      style={style}
     >
       <Text
         secondary={secondary}

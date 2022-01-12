@@ -9,6 +9,8 @@ import {
   Container,
   Title
 } from './styled'
+import { useAuth } from '../../utils/hooks/useAuth'
+import { ModeButton } from '../../components/modeButton'
 
 const initialValues = {
   email: '',
@@ -16,20 +18,20 @@ const initialValues = {
   name: '',
   lastName: '',
   phone: '',
-  address: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  owner: true,
+  walker: false
 }
 
 const LogUp = () => {
+  const auth = useAuth()
   return (
     <Container>
       <Title>Registro</Title>
       <Formik
         initialValues={initialValues}
         validationSchema={logUpValidation}
-        onSubmit={(props) => {
-          console.log('formik props >>>', props)
-        }}
+        onSubmit={auth.createAccount}
       >
         {({
           values,
@@ -38,7 +40,8 @@ const LogUp = () => {
           handleSubmit,
           handleBlur,
           isSubmitting,
-          isValid
+          isValid,
+          ...formikActions
         }) => (
           <>
             <Input
@@ -59,7 +62,7 @@ const LogUp = () => {
             />
             <Input
               error={errors.email}
-              label='Correo'
+              label='Correo Electronico'
               name='email'
               onBlur={handleBlur}
               onChange={handleChange}
@@ -74,14 +77,6 @@ const LogUp = () => {
               onChange={handleChange}
               type='tel'
               value={values.phone}
-            />
-            <Input
-              error={errors.address}
-              label='Correo'
-              name='address'
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values.address}
             />
             <Input
               error={errors.password}
@@ -101,6 +96,7 @@ const LogUp = () => {
               type='password'
               value={values.confirmPassword}
             />
+            <ModeButton onPress={formikActions.setFieldValue} owner={values.owner} walker={values.walker} />
             <Button
               disabled={!isValid || isSubmitting}
               onPress={handleSubmit}
