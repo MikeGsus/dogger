@@ -4,6 +4,7 @@ import { Title } from '../../containers/dashboard/styled'
 import { transformWalker } from '../../utils/hooks/useWalkers'
 import { DataTable } from '../table'
 
+// Display a table of Walkers when the user loged in is an owner
 export const Walkers = ({ walkerState }) => {
   return (
     <Container>

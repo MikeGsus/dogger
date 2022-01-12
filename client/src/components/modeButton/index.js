@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Label } from '../input/styled'
 
+// Display both buttons to select from owner and walker mode
+// used on the logUp form
 export const ModeButton = props => {
   return (
     <Container>

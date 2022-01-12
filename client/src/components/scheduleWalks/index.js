@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Title } from '../../containers/dashboard/styled'
 import { DataTable } from '../table'
 
+// Display a table of ScheduleWalks for both type of users (Owner, Walker)
 export const ScheduleWalks = ({ scheduleState, ...props }) => {
   return (
     <Container>

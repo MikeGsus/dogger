@@ -4,6 +4,7 @@ import { Title } from '../../containers/dashboard/styled'
 import { transformDogs } from '../../utils/hooks/useDogs'
 import { DataTable } from '../table'
 
+// Display a table of MyDogs when the user loged in is an owner
 export const MyDogs = ({ dogState }) => {
   return (
     <Container>
