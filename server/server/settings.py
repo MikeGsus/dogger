@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os
 import django_heroku
 from pathlib import Path
 
@@ -85,11 +86,11 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "dbpvs7oqp9e57i",
-        "USER": "aplqsgbmnksdgm",
-        "PASSWORD": "b03bcab8f4ed89447baa0fdfb6c0eea2df43787c858687b444c29b25450e6e87",
-        "HOST": "ec2-3-227-15-75.compute-1.amazonaws.com",
-        "PORT": "5432",
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
     }
 }
 
