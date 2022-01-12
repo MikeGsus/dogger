@@ -16,8 +16,40 @@ from rest_framework.authtoken.models import Token
 from django.dispatch import receiver
 from django.conf import settings
 from django.db.models.signals import post_save
-from datetime import datetime, time
-# Create your views here.	
+# from datetime import datetime, time
+from rest_framework.authentication import TokenAuthentication
+
+
+class UserDogs(APIView):
+	"""
+		Controller to retreive dogs by user
+	"""
+
+	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+	def get(self, request, *args, **kwargs):
+		owner_id = self.kwargs.get('pk')
+		dogs = Dogs.objects.filter(owner=owner_id)
+		serializer = DogSerializer(dogs, many=True)
+		return Response(serializer.data)
+
+class UserScheduleWalks(APIView):
+	"""
+		Controller to retreive schedule walks by user
+	"""
+
+	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+	def get(self, request, *args, **kwargs):
+		owner_id = self.kwargs.get('pk')
+		scheduleWalks = None
+		scheduleWalks = ScheduledWalks.objects.filter(dog__owner=owner_id)
+		print(len(scheduleWalks))
+		if len(scheduleWalks) == 0:
+			scheduleWalks = ScheduledWalks.objects.filter(walker__walker=owner_id)
+			print(scheduleWalks)
+		serializer = ScheduledWalkSerializer(scheduleWalks, many=True)
+		return Response(serializer.data)
 
 class Breeds(APIView):
 
@@ -255,12 +287,32 @@ class ScheduledWalksView(APIView):
 			dog = Dogs.objects.get(id=dog_id)
 			walker = Walkers.objects.get(id=walker_id)
 			schedule = Schedules.objects.get(id=schedule_id)
-			r = ScheduledWalks(dog=dog, walker=walker, schedule=schedule)
-			r.save()
-			serializer = ScheduledWalkSerializer(r)
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
+			# validate that the dog size is accepted in that particular schedule
+			if dog.size == schedule.size:
+				# get current walker scheduleWalks
+				# use to accept only 3 dogs at the time and nothing more
+				# if the schedule are empty the scheduleWalks is register success
+				scheduleWalksIn = ScheduledWalks.objects.filter(walker=walker, schedule=schedule)
+				if len(scheduleWalksIn) < 3:
+					r = ScheduledWalks(dog=dog, walker=walker, schedule=schedule)
+					r.save()
+					serializer = ScheduledWalkSerializer(r)
+					return Response(serializer.data, status=status.HTTP_201_CREATED)
+				else:
+					return Response({
+						'success': False,
+						'error': 'Lo sentimos este walker tiene lleno los servicios en este horario prueba en otro horario.',
+					})
+			else:
+				return Response({
+					'success': False,
+					'error': 'El tamaño del perro no es aceptado en ese horario prueba en otro horario.',
+				})
 		except (Dogs.DoesNotExist, Walkers.DoesNotExist, Schedules.DoesNotExist):
-			raise ValidationError('No se encontro dog o walker o schedule para generar el registro.')
+			return Response({
+					'success': False,
+					'error': 'No se encontro dog o walker o schedule para generar el registro.'
+				})
 	
 class ScheduledWalksDetailsView(APIView):
 	"""
