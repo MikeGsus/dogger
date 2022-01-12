@@ -9,6 +9,8 @@ Django = "*"
 Pillow = "*"
 django-cors-headers = "*"
 arrow = "*"
+gunicorn = "*"
+django-heroku = "*"
 
 [dev-packages]
 
