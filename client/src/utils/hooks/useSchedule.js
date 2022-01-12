@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { capitalize } from 'lodash'
 import { formatHour } from '../../components/dateTiles'
 
-const ENDPOINT = https://fierce-bastion-86846.herokuapp.com
+const ENDPOINT = 'https://fierce-bastion-86846.herokuapp.com'
 
 const BASE_PATH = `${ENDPOINT}/api/v1/scheduled-walks/`
 

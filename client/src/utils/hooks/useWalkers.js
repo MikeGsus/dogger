@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-const ENDPOINT = https://fierce-bastion-86846.herokuapp.com
+const ENDPOINT = 'https://fierce-bastion-86846.herokuapp.com'
 
 const BASE_URL = `${ENDPOINT}/api/v1/walkers/`
 
