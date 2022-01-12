@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { capitalize } from 'lodash'
 import { formatHour } from '../../components/dateTiles'
 
-const ENDPOINT = process.env.REACT_APP_API_URL
+const ENDPOINT = https://fierce-bastion-86846.herokuapp.com
 
 const BASE_PATH = `${ENDPOINT}/api/v1/scheduled-walks/`
 
@@ -33,7 +33,6 @@ export function useSchedule () {
   const user = useSelector(state => state.users)
   async function getScheduleWalks () {
     try {
-      console.log('PATH:', `${ENDPOINT}/api/v1/users/${user.user.id}/scheduleWalks`)
       const response = await fetch(
         `${ENDPOINT}/api/v1/users/${user.user.id}/scheduleWalks`,
         {
@@ -45,7 +44,6 @@ export function useSchedule () {
         }
       )
       const scheduleWalks = await response.json()
-      console.log('JSON:', scheduleWalks)
       dispatch({ type: 'SET_SCHEDULES_WALKS', payload: scheduleWalks })
     } catch (error) {
       window.alert(error.message)

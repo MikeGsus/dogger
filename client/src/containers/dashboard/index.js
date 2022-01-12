@@ -21,7 +21,6 @@ const Dashboard = props => {
   const dogsState = useDogs()
   const walkerState = useWalkers()
   const scheduleState = useSchedule()
-  console.log('scheduleState:', scheduleState)
   const [visible, setVisible] = useState(false)
   const [dog, setDog] = useState(null)
   const [walker, setWalker] = useState(null)

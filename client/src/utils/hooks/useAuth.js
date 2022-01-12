@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-const ENDPOINT = process.env.REACT_APP_API_URL
+const ENDPOINT = https://fierce-bastion-86846.herokuapp.com
 
 export function useAuth () {
   const dispatch = useDispatch()
