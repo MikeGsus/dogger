@@ -11,8 +11,68 @@ from dogger.models import DogSize as DogSizeModel
 from dogger.models import Schedules as SchedulesModel
 from dogger.models import ScheduledWalks as ScheduledWalksModel
 from dogger.models import Walkers as WalkersModel
-
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from django.dispatch import receiver
+from django.conf import settings
+from django.db.models.signals import post_save
+from datetime import datetime, time
 # Create your views here.	
+
+class Breeds(APIView):
+
+	def get(self, request, *args, **kwargs):
+		breeds = Breed.objects.all()
+		serializer = BreedsSerializer(breeds, many=True)
+		return Response(serializer.data)
+
+class AuthTokenWithExtraInfo(ObtainAuthToken):
+	def post(self, request, *args, **kwargs):
+		serializer = AuthCustomTokenSerializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		try:
+			data = serializer.validated_data['user']
+			user_email = data.email
+			user = Auth.objects.get(email=user_email)
+			token, created = Token.objects.get_or_create(user=user)
+			u = UsersModel.objects.get(account=user)
+			response_data = {
+				"token": token.key,
+				"user": UserSerializer(u).data,
+			}
+			return Response(response_data)
+		except (User.DoesNotExist, UsersModel.DoesNotExist):
+			return Response(
+				{
+					"success": False,
+					"error": f"Usuario con email {user_email} no existe.",
+					"status": status.HTTP_404_NOT_FOUND,
+				}
+			)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+	if created:
+		Token.objects.create(user=instance)
+
+
+class UsersView(APIView):
+
+	def get(self, request, format=None):
+		users = UsersModel.objects.all()
+		serializer = UserSerializer(users, many=True)
+		return Response(serializer.data)
+	
+	def post(self, request, *args, **kwargs):
+		serializer = RegisterSerializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		return Response({
+			"success": True,
+			"token": serializer.validated_data['token'],
+			"user": UserSerializer(serializer.validated_data['user']).data,
+			"status": status.HTTP_201_CREATED
+		})
+
 
 class UsersDetailsView(APIView):
 	"""
@@ -188,11 +248,19 @@ class ScheduledWalksView(APIView):
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
-		serializer = ScheduledWalkSerializer(data=request.data)
-		if serializer.is_valid():
-			serializer.save()
+		dog_id = request.data.get('dog', None)
+		walker_id = request.data.get('walker', None)
+		schedule_id = request.data.get('schedule', None)
+		try:
+			dog = Dogs.objects.get(id=dog_id)
+			walker = Walkers.objects.get(id=walker_id)
+			schedule = Schedules.objects.get(id=schedule_id)
+			r = ScheduledWalks(dog=dog, walker=walker, schedule=schedule)
+			r.save()
+			serializer = ScheduledWalkSerializer(r)
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return  Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		except (Dogs.DoesNotExist, Walkers.DoesNotExist, Schedules.DoesNotExist):
+			raise ValidationError('No se encontro dog o walker o schedule para generar el registro.')
 	
 class ScheduledWalksDetailsView(APIView):
 	"""
@@ -233,6 +301,21 @@ class WalkersView(APIView):
 	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 	
 	def get(self, request, format=None):
+		# def is_time_between(begin_time, end_time, check_time=None):
+		# 	# If check time is not given, default to current UTC time
+		# 	check_time = check_time or datetime.utcnow().time()
+		# 	if begin_time < end_time:
+		# 		return check_time >= begin_time and check_time <= end_time
+		# 	else: # crosses midnight
+		# 		return check_time >= begin_time or check_time <= end_time
+
+		# Original test case from OP
+		# print('IS BETWEEN:', is_time_between(time(10,30), time(16,30), time(8,00)))
+
+		# Test case when range crosses midnight
+		# print('IS BETWEEN:', is_time_between(time(22,0), time(4,00), time(3,59)))
+		# return Response('ok')
+
 		users = WalkersModel.objects.all()
 		serializer = WalkerSerializer(users, many=True)
 		return Response(serializer.data)
