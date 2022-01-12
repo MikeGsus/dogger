@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { Link } from "react-router-dom";
 import { Button } from '../'
 import {
@@ -11,7 +11,11 @@ import {
 } from './styled'
 
 const Navbar = (props) => {
+  const dispatch = useDispatch()
   const { isLogged } = props
+  function onLogOut () {
+    dispatch({ type: 'LOG_OUT' })
+  }
   return (
     <Container>
       <TitleContainer>
@@ -22,7 +26,7 @@ const Navbar = (props) => {
           </Title>
         </Link>
       </TitleContainer>
-      { !isLogged &&
+      { !isLogged ?
         (
           <ButtonsContainer>
             <Link to="/log-up">
@@ -36,6 +40,12 @@ const Navbar = (props) => {
               </Button>
             </Link>
           </ButtonsContainer>
+        ) : (
+          <Link to='/'>
+            <Button onPress={onLogOut} secondary>
+              Cerrar Sesión
+            </Button>
+          </Link>
         )
       }
     </Container>

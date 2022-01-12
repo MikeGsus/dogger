@@ -9,11 +9,15 @@ import {
   persistReducer
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import logger from 'redux-logger'
 
 import {
   account,
   users,
-  ui
+  ui,
+  dogs,
+  walkers,
+  schedules
 } from '../reducers'
 
 const persistConfig = {
@@ -24,16 +28,21 @@ const persistConfig = {
 const reducers = combineReducers({
   account,
   users,
-  ui
+  ui,
+  dogs,
+  walkers,
+  schedules
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers)
 
 let store = createStore(
   persistedReducer,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, logger)
 )
 
 let persistor = persistStore(store)
+
+// persistor.purge()
 
 export default { store, persistor }

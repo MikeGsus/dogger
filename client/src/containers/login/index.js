@@ -11,6 +11,7 @@ import {
   Logo,
   Title
 } from './styled'
+import { useAuth } from '../../utils/hooks/useAuth'
 
 const initialValues = {
   email: '',
@@ -18,6 +19,7 @@ const initialValues = {
 }
 
 const LogIn = () => {
+  const auth = useAuth()
   return (
     <Container>
       <Logo src={require('../../assets/img/png/logo/dogger_logo.png')} alt='Dogger' />
@@ -26,9 +28,7 @@ const LogIn = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={logInValidation}
-          onSubmit={(props) => {
-            console.log('formik props >>>', props)
-          }}
+          onSubmit={auth.loginWithEmailAndPassword}
         >
           {({
             values,
